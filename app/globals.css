@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+:root {
+  --background: #141414;
+  --foreground: #ffffff;
+  --netflix-red: #E50914;
+  --netflix-red-hover: #B80710;
+  --netflix-dark: #141414;
+  --netflix-card: #181818;
+  --netflix-border: #2a2a2a;
+}
+
+body {
+  background-color: #141414;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Custom Netflix Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #141414;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #E50914;
+}
+
+/* Hide scrollbar for carousel but keep scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Cinematic text drop shadows */
+.text-shadow-netflix {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+.text-shadow-red {
+  text-shadow: 0 0 20px rgba(229, 9, 20, 0.6);
+}
+
+/* Card hover zoom */
+.netflix-card-hover {
+  transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.3s ease;
+}
+
+.netflix-card-hover:hover {
+  transform: scale(1.04);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8), 0 0 15px rgba(229, 9, 20, 0.3);
+  z-index: 20;
+}

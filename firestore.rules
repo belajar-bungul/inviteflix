@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: Check if user is authenticated admin
+    function isAdmin() {
+      return request.auth != null;
+    }
+
+    // 1. Invitations Collection
+    match /invitations/{invitationId} {
+      // Public can read published invitations; Admins can read all
+      allow read: if resource.data.isPublished == true || isAdmin();
+      
+      // Only authenticated admin can create, update, or delete invitations
+      allow create, update, delete: if isAdmin();
+
+      // 2. Wishes & RSVP Sub-collection
+      match /wishes/{wishId} {
+        // Public can read approved/submitted wishes
+        allow read: if true;
+
+        // Public can create new wishes with strict validation:
+        // - Name and message must not be empty
+        // - Cannot self-pin (isPinned must be false)
+        // - Must reference valid attendance status
+        allow create: if request.resource.data.name is string
+                      && request.resource.data.name.size() > 0
+                      && request.resource.data.name.size() <= 100
+                      && request.resource.data.message is string
+                      && request.resource.data.message.size() > 0
+                      && request.resource.data.message.size() <= 1000
+                      && request.resource.data.isPinned == false
+                      && request.resource.data.attendance in ['hadir', 'tidak_hadir', 'ragu'];
+
+        // Only authenticated admins can pin/unpin or delete wishes
+        allow update, delete: if isAdmin();
+      }
+    }
+
+    // Default deny all other paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
